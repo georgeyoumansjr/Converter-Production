@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% set active_page = "write" %}
+{% block content %}
+<div style=" position: fixed;" >
+  <p>ADD:</p>
+  <div id="addP-div" ><button type="button" class="btn btn-outline-secondary" style="width: 90px;" id="addP">paragraph</button></div>
+  <div id="addH-div" ><button type="button" class="btn btn-outline-secondary" style="width: 90px;" id="addH">subheader</button></div>
+  <div id="addImg-div" ><button type="button" class="btn btn-outline-secondary" style="width: 90px;" id="addImg">image</button></div>
+  <button class="btn btn-outline-secondary" style="width: 90px;" id="done">Done</button>
+</div>
+<div id="container">
+  <div class="container">
+      <div class="well well-sm">
+        <div id="content">
+          <h1 contenteditable="true" id="title" >Title</h1>
+    </div>
+  </div>
+  </div>
+</div>
+    
+    
+<script>
+  var DoneButton = document.getElementById("done");
+  var preButton = document.getElementById("addP");
+  var headerButton = document.getElementById("addH");
+  var imageButton = document.getElementById("addImg");
+  
+  DoneButton.addEventListener("click", done);
+  preButton.addEventListener("click", addP);
+  headerButton.addEventListener("click", addH);
+  imageButton.addEventListener("click", addImg);
+/*
+  document.getElementById('thumbnail').addEventListener("change", function () {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const img = new Image();
+        img.src = reader.result;
+        img.style.maxWidth = '600px'
+        img.style.maxHeight = '300px'
+        img.id = `thumbnail.png`
+        document.getElementById('content').appendChild(img);
+        input.remove();
+        formData.append(`thumbnail`, dataURLtoBlob(reader.result), `thumbnail.png`);
+      };
+      reader.readAsDataURL(input.files[0]);
+    });
+*/
+  function addP() {
+    var p = document.createElement("p");
+    p.innerText = 'Text';
+    p.contentEditable = true;
+    document.getElementById('content').appendChild(p);
+  }
+  function addH() {
+    var h = document.createElement("h4");
+    h.innerText = 'Subheader';
+    h.contentEditable = true;
+    document.getElementById('content').appendChild(h);
+  }
+  
+  const formData = new FormData();
+  let inputIndex = 0;
+  function addImg() {
+    var input = document.createElement("input");
+    input.type = 'file';
+    document.getElementById('content').appendChild(input);
+    
+    input.addEventListener("change", function () {
+      const reader = new FileReader();
+      reader.onload = function () {
+        const img = new Image();
+        img.src = reader.result;
+        img.style.maxWidth = '600px';
+        img.style.maxHeight = '300px';
+        img.id = `image-${inputIndex}.png`;
+        document.getElementById('content').appendChild(img);
+        input.remove();
+        formData.append(`image-${inputIndex}`, dataURLtoBlob(reader.result), `image-${inputIndex}.png`);
+        inputIndex += 1;
+      };
+      reader.readAsDataURL(input.files[0]);
+    });
+    
+  }
+
+function saveImages() {
+  title = document.getElementById('title').innerText;
+  html = document.querySelector('#container').innerHTML;
+  formData.append('title',title)
+  formData.append('html',html)
+  fetch("/blog/write", {
+    method: "POST",
+    body: formData
+  }).then(response => {
+    window.location = '/blog';
+  })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+function dataURLtoBlob(dataURL) {
+  const parts = dataURL.split(";base64,");
+  const contentType = parts[0].split(":")[1];
+  const raw = window.atob(parts[1]);
+  const rawLength = raw.length;
+  const uInt8Array = new Uint8Array(rawLength);
+  for (let i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i);
+  }
+  return new Blob([uInt8Array], { type: contentType });
+}
+  function done() {
+    title = document.getElementById('title').innerText;
+    title = title.replace(' ', '-');
+    const children = document.querySelectorAll("#content > *");
+    console.log(children);
+    children.forEach(element => {
+
+      console.log(element.nodeName)
+      if(element.nodeName === 'P'){
+        text = element.innerText;
+        formData.append('text',text);
+        return;
+      }
+    });
+    children.forEach(element => {
+      element.contentEditable = false;
+      element.src = '../static/blog/'+ title + '/' + element.id;
+    });
+    var content = document.getElementById('content').innerHTML;
+    saveImages();
+  }
+
+
+
+
+
+
+</script>
+
+{% endblock %}

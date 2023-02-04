@@ -1,0 +1,6 @@
+indexes:
+  - kind: History
+    properties:
+      - name: userid
+      - name: created_at
+        direction: desc

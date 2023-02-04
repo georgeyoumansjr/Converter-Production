@@ -1,0 +1,4 @@
+<FilesMatch "\.(htaccess|py|ini|mako)$">
+    Order Allow, Deny
+    Deny from all
+</FilesMatch>

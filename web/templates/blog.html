@@ -1,0 +1,52 @@
+{% extends 'base.html' %} {% set active_page = "blog" %} {% block content %}
+<div id="app" class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="well well-sm">
+        {% if blog_posts %}
+        <br>
+        <div  class="row">
+          <div class="jumbotron">
+            <h4 class="text-primary">Blogs</h4>
+              <p class="lead d-none d-sm-block">Some text...</p>
+                <hr class="my-3" />
+                  <div class="card-columns">
+                      {% for blog_post in blog_posts %}
+                        <div class="card" style="width: 18rem;">
+                          <img class="card-img-top" src="../static/blog/{{blog_post.title}}/image-0.png" alt="Card image cap">
+                          <div class="card-body">
+                            <h5 class="card-title">{{blog_post.title.replace('-',' ')}}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{blog_post.created_at}}</h6>
+                            <p class="card-text">{{blog_post.text}}</p>
+                            <a href="blog/{{blog_post.title}}" class="btn btn-primary">Read More --></a>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <br>
+              <div  class="row">
+                <div class="jumbotron">
+                  <h4 class="text-primary">Blogs</h4>
+                    <p class="lead d-none d-sm-block">Pick one and learn more</p>
+                      <hr class="my-3" />
+                      Nothing to see...
+                        
+                        </div>
+                      </div>
+                    </div>
+        {% endif %}
+      </div>
+    </div>
+
+<script src="{{ url_for('static', filename='dist/app.bundle.js')|autoversion }}"></script>
+<script
+  type="text/javascript"
+  src="https://www.dropbox.com/static/api/2/dropins.js"
+  id="dropboxjs"
+  data-app-key="h2vquaox6gv2snd"
+></script>
+{% endblock %}

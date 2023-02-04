@@ -1,0 +1,6 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/tnhlabsc/youtube-mp3-mp4.com"
+PassengerBaseURI "/"
+PassengerPython "/home/tnhlabsc/virtualenv/youtube-mp3-mp4.com/3.9/bin/python"
+PassengerAppLogFile "/home/tnhlabsc/logs/wsgi.log"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END

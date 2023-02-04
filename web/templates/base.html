@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<link href="{{ url_for('static', filename='dist/app.css')|autoversion}}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='ext/bootstrap-social.css')|autoversion}}" rel="stylesheet">
+	
+	{% if title is defined %}
+	<title>{{ title }} - YouTube to MP3 Converter</title>
+	{% else %}
+	<title>YouTube to MP3 Converter</title>
+	{% endif %}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-C56KTJ5YM1"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-C56KTJ5YM1');
+	</script>
+</head>
+<body>
+	{% if current_user.is_admin %}
+		{% set navigation_bar = [
+			('/', 'home', 'Home'),
+			('/contact', 'contact', 'Contact'),
+			('/page/support', 'support', 'Support'),
+			('/blog', 'blog', 'Blog'),
+			('/blog/write', 'write', 'Write Blog')
+		] -%}
+	{% else %}
+		{% set navigation_bar = [
+			('/', 'home', 'Home'),
+			('/contact', 'contact', 'Contact'),
+			('/page/support', 'support', 'Support'),
+			('/blog', 'blog', 'Blog')
+		] -%}
+	{% endif %}
+	{% set active_page = active_page|default('home') -%}		
+	<nav id="topMenu" class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary px-2">
+		<div class="container">
+			<a class="navbar-brand d-flex align-items-center site-logo" href="/">
+                <img src="{{ url_for('static', filename='new-logo.png') }}" width="50px" height="50px">
+			    <span class="d-inline-block mr-1">SMART CONVERTER</span>
+		    </a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav ml-auto">
+					{% for href, id, caption in navigation_bar %}
+					<li {% if id == active_page %}class="nav-link active"{% else %}class="nav-link"{% endif %}>
+						<a class="nav-link" href="{{ href|e }}">{{ caption|e }}</a></li>
+					{% endfor %}
+				</ul>
+			<ul class="nav navbar-nav">							
+				{% if current_user.is_authenticated %}
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Account
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
+						<a class="dropdown-item" href="{{ url_for('profile_bp.profile') }}">My Profile</a>
+						<a class="dropdown-item" href="{{ url_for('profile_bp.profile_history') }}">History</a>	
+						<a class="dropdown-item" href="{{ url_for('profile_bp.logout') }}">Log out</a>								
+					</div>							
+				</li>						
+				{% else %}						
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Login
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">								
+						<a class="dropdown-item" href="{{ url_for('facebook.login') }}">With Facebook</a>
+						<a class="dropdown-item" href="{{ url_for('google.login') }}">With Google</a>									
+					</div>
+				</li>																						
+				{% endif %}                    														
+				</ul>            
+			</div>
+		</div>
+	</nav>		
+	<div id="app" class="container"></div>
+	{% block content %}{% endblock %}
+	<div class="clearfix"><p></p><p></p></div>			
+	<!-- Footer -->
+	<footer class="footer">
+		<div class="container">
+			<span class="text-muted"><p class="text-center">Copyright &copy; 2023 Powered by <a href="https://www.smartdevweb.com" target="_blank">SEAnalytics</a>. <a href="/page/privacy">Privacy</a>.</p></span>
+		</div>
+	</footer>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/f0612695c8.js" crossorigin="anonymous"></script>
+	<!-- Optional JavaScript -->
+	{% block script %}{% endblock %}
+</body>
+</html>
