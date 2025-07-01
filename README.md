@@ -1,10 +1,3 @@
-# Convertca.com
-
-The idea is to practice some modern web technologies such as _Flask, VueJS, Webpack, Bootstrap_ ... to develop a web application then deploy it to _Google Compute Engine (GCE)_, with _Google DataStore_ in robust ways. The main function of the app is to convert an online video from youtube or other services to MP3 with some addtional features:
-
-- Facebook authorization
-- Save the converted file to DropBox
-
 ## Requirements
 
 - Python 3 and packages in `requirements.txt`
